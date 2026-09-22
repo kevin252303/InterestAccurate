@@ -96,8 +96,13 @@ export default function LoginScreen({ onLoginSuccess }) {
       })
       .then(r => r.json())
       .then(data => {
-        if (data.success) onLoginSuccess({ ...data, masterPin: 'dev@1234' });
-      });
+        if (data.success) {
+          onLoginSuccess(data);
+        } else {
+          setError(data.message || 'Quick login failed: Master PIN has been changed. Please enter your new PIN.');
+        }
+      })
+      .catch(err => setError(err.message));
     }, 100);
   };
 
@@ -217,7 +222,7 @@ export default function LoginScreen({ onLoginSuccess }) {
                   <input
                     type="password"
                     required
-                    placeholder="Enter Master PIN (dev@1234)"
+                    placeholder="Enter Master PIN"
                     value={masterPin}
                     onChange={(e) => setMasterPin(e.target.value)}
                     className="w-full bg-slate-950 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500 font-mono tracking-widest"

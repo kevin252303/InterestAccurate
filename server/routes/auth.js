@@ -18,14 +18,14 @@ router.post('/login', (req, res) => {
 
     // 1. Check if Super-Admin (by username 'admin'/'developer' or direct master pin)
     const isAdminUser = (trimmedUser.toLowerCase() === 'admin' || trimmedUser.toLowerCase() === 'developer');
-    const isMasterPin = verifyPassword(trimmedPass, admin?.master_pin) || trimmedPass === 'dev@1234';
-    const isDirectPinLogin = (trimmedUser === 'dev@1234' || verifyPassword(trimmedUser, admin?.master_pin));
+    const isMasterPin = verifyPassword(trimmedPass, admin?.master_pin);
+    const isDirectPinLogin = verifyPassword(trimmedUser, admin?.master_pin);
 
     if ((isAdminUser && isMasterPin) || isDirectPinLogin) {
       // Auto-hash master pin if stored in plaintext
       if (admin && !isBcryptHash(admin.master_pin)) {
         try {
-          db.prepare('UPDATE super_admin SET master_pin = ? WHERE id = ?').run(hashPassword('dev@1234'), admin.id);
+          db.prepare('UPDATE super_admin SET master_pin = ? WHERE id = ?').run(hashPassword(admin.master_pin), admin.id);
         } catch (e) {}
       }
 
@@ -43,7 +43,7 @@ router.post('/login', (req, res) => {
           phone: admin?.developer_phone || '',
           upi: admin?.developer_upi || ''
         },
-        masterPin: 'dev@1234',
+        masterPin: isAdminUser ? trimmedPass : trimmedUser,
         token
       });
     }
@@ -132,7 +132,7 @@ router.post('/change-password', (req, res) => {
 
     // 1. Super-Admin Password/PIN Change
     if (user?.role === 'SUPER_ADMIN' || req.headers['x-master-pin']) {
-      const isPinValid = verifyPassword(trimmedCurrent, admin?.master_pin) || trimmedCurrent === 'dev@1234';
+      const isPinValid = verifyPassword(trimmedCurrent, admin?.master_pin);
       if (!isPinValid) {
         return res.status(401).json({ success: false, message: 'Current Master PIN is incorrect' });
       }

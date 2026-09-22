@@ -131,7 +131,7 @@ function requireSuperAdmin(req, res, next) {
   const pin = req.headers['x-master-pin'] || req.body?.pin;
   const admin = getSuperAdmin();
 
-  if (admin && pin && (verifyPassword(pin.trim(), admin.master_pin) || pin.trim() === 'dev@1234')) {
+  if (admin && pin && verifyPassword(pin.trim(), admin.master_pin)) {
     return next();
   }
 

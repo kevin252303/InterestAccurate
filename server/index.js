@@ -108,6 +108,6 @@ app.listen(PORT, () => {
   console.log(`\n======================================================`);
   console.log(`🚀 InterestAccurate Multi-Tenant SaaS Platform running on port ${PORT}`);
   console.log(`🌐 App: http://localhost:${PORT}`);
-  console.log(`👑 Super-Admin Master PIN: dev@1234`);
+  console.log(`👑 Super-Admin Portal: http://localhost:${PORT} (Default PIN: dev@1234)`);
   console.log(`======================================================\n`);
 });

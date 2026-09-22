@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { formatCurrency, formatDate } from '../utils/formatters';
 
-export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient }) {
+export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, onUpdateMasterPin }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -289,6 +289,15 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient })
       const json = await res.json();
       if (json.success) {
         showToast(json.message);
+        if (profileForm.new_master_pin && profileForm.new_master_pin.trim()) {
+          onUpdateMasterPin?.(profileForm.new_master_pin.trim());
+        }
+        setProfileForm(prev => ({
+          ...prev,
+          current_master_pin: '',
+          new_master_pin: '',
+          confirm_master_pin: ''
+        }));
         setIsEditProfileOpen(false);
         fetchDashboard();
       } else {

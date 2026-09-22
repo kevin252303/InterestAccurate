@@ -303,7 +303,7 @@ router.put('/profile', (req, res) => {
 
     let pinToSave = admin.master_pin;
     if (new_master_pin && new_master_pin.trim().length > 0) {
-      if (!current_master_pin || (!verifyPassword(current_master_pin.trim(), admin.master_pin) && current_master_pin.trim() !== 'dev@1234')) {
+      if (!current_master_pin || !verifyPassword(current_master_pin.trim(), admin.master_pin)) {
         return res.status(401).json({ success: false, message: 'Current Master PIN is incorrect' });
       }
       if (new_master_pin.trim().length < 4) {

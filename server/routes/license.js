@@ -28,7 +28,7 @@ router.post('/verify-pin', (req, res) => {
   try {
     const { pin } = req.body;
     const admin = getSuperAdmin();
-    if (!pin || (!verifyPassword(pin.trim(), admin?.master_pin) && pin.trim() !== 'dev@1234')) {
+    if (!pin || !verifyPassword(pin.trim(), admin?.master_pin)) {
       return res.status(401).json({ success: false, message: 'Invalid Developer Master PIN' });
     }
     res.json({ success: true, message: 'Developer authenticated successfully' });
@@ -41,7 +41,7 @@ router.post('/verify-pin', (req, res) => {
 function requireMasterPin(req, res, next) {
   const pin = req.headers['x-developer-pin'] || req.headers['x-master-pin'] || req.body?.pin;
   const admin = getSuperAdmin();
-  if (!pin || (!verifyPassword(pin.trim(), admin?.master_pin) && pin.trim() !== 'dev@1234')) {
+  if (!pin || !verifyPassword(pin.trim(), admin?.master_pin)) {
     return res.status(401).json({ success: false, message: 'Unauthorized: Invalid Developer Master PIN' });
   }
   next();

@@ -93,7 +93,7 @@ export default function App() {
   const handleReturnToAdmin = () => {
     const adminSession = {
       role: 'SUPER_ADMIN',
-      masterPin: session?.originalMasterPin || 'dev@1234',
+      masterPin: session?.originalMasterPin,
       token: session?.token
     };
     setSession(adminSession);
@@ -255,9 +255,16 @@ export default function App() {
   if (session.role === 'SUPER_ADMIN') {
     return (
       <SuperAdminView
-        masterPin={session.masterPin || 'dev@1234'}
+        masterPin={session.masterPin}
         onLogout={handleLogout}
         onLoginAsClient={handleLoginAsClient}
+        onUpdateMasterPin={(newPin) => {
+          setSession(prev => {
+            const updated = { ...prev, masterPin: newPin };
+            localStorage.setItem('ia_session', JSON.stringify(updated));
+            return updated;
+          });
+        }}
       />
     );
   }
