@@ -35,6 +35,9 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient })
   const [isAddClientOpen, setIsAddClientOpen] = useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [editingClient, setEditingClient] = useState(null);
+  const [resetPasswordClient, setResetPasswordClient] = useState(null);
+  const [clientNewPassword, setClientNewPassword] = useState('');
+  const [clientConfirmPassword, setClientConfirmPassword] = useState('');
 
   // Add Client Form State
   const [newClient, setNewClient] = useState({
@@ -178,6 +181,44 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient })
       }
     } catch (err) {
       showToast(err.message, 'error');
+    }
+  };
+
+  const handleAdminResetClientPassword = async (e) => {
+    e.preventDefault();
+    if (!clientNewPassword || clientNewPassword.length < 4) {
+      showToast('New password must be at least 4 characters long', 'error');
+      return;
+    }
+    if (clientNewPassword !== clientConfirmPassword) {
+      showToast('Passwords do not match', 'error');
+      return;
+    }
+
+    setActionLoading(true);
+    try {
+      const res = await fetch(`/api/super-admin/clients/${resetPasswordClient.id}/password`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-master-pin': masterPin
+        },
+        body: JSON.stringify({ new_password: clientNewPassword })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message || 'Client password reset successfully!');
+        setResetPasswordClient(null);
+        setClientNewPassword('');
+        setClientConfirmPassword('');
+        fetchDashboard();
+      } else {
+        showToast(data.message || 'Password reset failed', 'error');
+      }
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -497,6 +538,18 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient })
                             <ExternalLink className="w-3 h-3" />
                           </button>
 
+                          <button
+                            onClick={() => {
+                              setResetPasswordClient(client);
+                              setClientNewPassword('');
+                              setClientConfirmPassword('');
+                            }}
+                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-400/80 hover:text-amber-300 border border-slate-700 cursor-pointer transition-colors"
+                            title="Reset / Change Client Password"
+                          >
+                            <KeyRound className="w-3.5 h-3.5" />
+                          </button>
+
                           {client.id !== 1 && (
                             <button
                               onClick={() => handleDeleteClient(client.id)}
@@ -738,6 +791,75 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient })
                   className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold shadow-md shadow-amber-500/20 cursor-pointer"
                 >
                   Save Profile
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Reset Client Password Modal */}
+      {resetPasswordClient && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/95">
+              <div className="flex items-center gap-2">
+                <KeyRound className="w-5 h-5 text-amber-400" />
+                <h3 className="font-bold text-white text-base">Reset Client Password</h3>
+              </div>
+              <button 
+                onClick={() => setResetPasswordClient(null)} 
+                className="text-slate-400 hover:text-white cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleAdminResetClientPassword} className="p-6 space-y-4 text-xs">
+              <div className="p-3 bg-slate-800/40 rounded-xl border border-slate-800 space-y-1">
+                <div className="text-slate-400">Client Firm:</div>
+                <div className="text-white font-bold text-sm">{resetPasswordClient.business_name}</div>
+                <div className="text-slate-400 text-[11px]">Owner: {resetPasswordClient.owner_name} • Phone: {resetPasswordClient.phone}</div>
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1 font-semibold">New Password *</label>
+                <input
+                  type="password"
+                  required
+                  placeholder="Min 4 characters"
+                  value={clientNewPassword}
+                  onChange={(e) => setClientNewPassword(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1 font-semibold">Confirm New Password *</label>
+                <input
+                  type="password"
+                  required
+                  placeholder="Re-enter new password"
+                  value={clientConfirmPassword}
+                  onChange={(e) => setClientConfirmPassword(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-3">
+                <button
+                  type="button"
+                  onClick={() => setResetPasswordClient(null)}
+                  className="px-4 py-2 font-semibold text-slate-400 hover:text-white cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={actionLoading}
+                  className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold shadow-md shadow-amber-500/20 cursor-pointer disabled:opacity-50"
+                >
+                  {actionLoading ? 'Updating...' : 'Set Password'}
                 </button>
               </div>
             </form>

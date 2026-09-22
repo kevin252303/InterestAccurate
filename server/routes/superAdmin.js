@@ -253,6 +253,34 @@ router.put('/clients/:id', (req, res) => {
   }
 });
 
+// Admin Reset / Change Client Password
+router.put('/clients/:id/password', (req, res) => {
+  try {
+    const { new_password } = req.body;
+    const trimmed = String(new_password || '').trim();
+    if (!trimmed || trimmed.length < 4) {
+      return res.status(400).json({ success: false, message: 'New password must be at least 4 characters long' });
+    }
+
+    const client = db.prepare('SELECT id, business_name, owner_name FROM clients WHERE id = ?').get(req.params.id);
+    if (!client) {
+      return res.status(404).json({ success: false, message: 'Client not found' });
+    }
+
+    const hashedPassword = hashPassword(trimmed);
+    db.prepare(`
+      UPDATE clients SET password = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?
+    `).run(hashedPassword, req.params.id);
+
+    res.json({
+      success: true,
+      message: `Password for ${client.business_name} (${client.owner_name}) reset successfully!`
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Delete client
 router.delete('/clients/:id', (req, res) => {
   try {
