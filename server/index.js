@@ -9,6 +9,7 @@ const { tenantMiddleware, getClientLicenseStatus } = require('./middleware/auth'
 
 const authRoutes = require('./routes/auth');
 const superAdminRoutes = require('./routes/superAdmin');
+const licenseRoutes = require('./routes/license');
 const dashboardRoutes = require('./routes/dashboard');
 const borrowerRoutes = require('./routes/borrowers');
 const loanRoutes = require('./routes/loans');
@@ -29,9 +30,11 @@ app.use(cors());
 app.use(express.json());
 
 // 1. Rate Limiting for Authentication (Brute force protection)
+// Automatically skips loopback addresses so developers are never locked out locally
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 30, // Limit each IP to 30 login requests per window
+  max: 60,
+  skip: (req) => req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1',
   message: { success: false, message: 'Too many login attempts from this IP. Please try again after 15 minutes.' },
   standardHeaders: true,
   legacyHeaders: false
@@ -40,7 +43,8 @@ const authLimiter = rateLimit({
 // 2. Rate Limiting for SMS Dispatch (Credit drain protection)
 const smsLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 50,
+  max: 60,
+  skip: (req) => req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1',
   message: { success: false, message: 'SMS rate limit exceeded. Please wait a few minutes before sending more messages.' },
   standardHeaders: true,
   legacyHeaders: false
@@ -49,6 +53,9 @@ const smsLimiter = rateLimit({
 // Public / Auth Routes
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth', authRoutes);
+
+// Developer License & Master Unlock Routes (Available during lockout)
+app.use('/api/license', licenseRoutes);
 
 // Rate limit manual SMS dispatches
 app.use('/api/sms/send-manual', smsLimiter);
@@ -78,6 +85,11 @@ app.use('/api/loans', loanRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/sms', smsRoutes);
 app.use('/api/settings', settingsRoutes);
+
+// Explicit JSON 404 Handler for all API routes (Prevents HTML response leaks)
+app.use('/api', (req, res) => {
+  res.status(404).json({ success: false, message: `API endpoint not found: ${req.method} ${req.originalUrl}` });
+});
 
 // Serve frontend in production if built
 const clientDist = path.join(__dirname, '../client/dist');
