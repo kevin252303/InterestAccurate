@@ -53,7 +53,9 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient })
     developer_name: '',
     developer_phone: '',
     developer_upi: '',
-    new_master_pin: ''
+    current_master_pin: '',
+    new_master_pin: '',
+    confirm_master_pin: ''
   });
 
   const showToast = (message, type = 'success') => {
@@ -78,7 +80,9 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient })
           developer_name: json.data.developerProfile.name || '',
           developer_phone: json.data.developerProfile.phone || '',
           developer_upi: json.data.developerProfile.upi || '',
-          new_master_pin: ''
+          current_master_pin: '',
+          new_master_pin: '',
+          confirm_master_pin: ''
         });
       } else {
         showToast(json.message || 'Failed to load dashboard', 'error');
@@ -216,6 +220,21 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient })
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
+    if (profileForm.new_master_pin) {
+      if (!profileForm.current_master_pin) {
+        showToast('Current Master PIN is required to set a new PIN', 'error');
+        return;
+      }
+      if (profileForm.new_master_pin.length < 4) {
+        showToast('New Master PIN must be at least 4 characters long', 'error');
+        return;
+      }
+      if (profileForm.new_master_pin !== profileForm.confirm_master_pin) {
+        showToast('New Master PIN and confirmation do not match', 'error');
+        return;
+      }
+    }
+
     setActionLoading(true);
     try {
       const res = await fetch('/api/super-admin/profile', {
@@ -663,15 +682,46 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient })
                 />
               </div>
 
-              <div>
-                <label className="block text-slate-400 mb-1">Change Super-Admin Master PIN</label>
-                <input
-                  type="password"
-                  placeholder="Leave blank to keep current PIN"
-                  value={profileForm.new_master_pin}
-                  onChange={(e) => setProfileForm({ ...profileForm, new_master_pin: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
-                />
+              <div className="pt-2 border-t border-slate-800 space-y-3">
+                <div className="font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <KeyRound className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Change Super-Admin Master PIN</span>
+                </div>
+
+                <div>
+                  <label className="block text-slate-400 mb-1">Current Master PIN</label>
+                  <input
+                    type="password"
+                    placeholder="Enter current PIN to confirm"
+                    value={profileForm.current_master_pin || ''}
+                    onChange={(e) => setProfileForm({ ...profileForm, current_master_pin: e.target.value })}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="block text-slate-400 mb-1">New Master PIN</label>
+                    <input
+                      type="password"
+                      placeholder="Min 4 chars"
+                      value={profileForm.new_master_pin || ''}
+                      onChange={(e) => setProfileForm({ ...profileForm, new_master_pin: e.target.value })}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-400 mb-1">Confirm New PIN</label>
+                    <input
+                      type="password"
+                      placeholder="Re-enter new PIN"
+                      value={profileForm.confirm_master_pin || ''}
+                      onChange={(e) => setProfileForm({ ...profileForm, confirm_master_pin: e.target.value })}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="flex justify-end gap-3 pt-3">

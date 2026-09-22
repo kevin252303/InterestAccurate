@@ -7,7 +7,10 @@ import {
   Phone, 
   CreditCard, 
   MessageSquare,
-  Sparkles
+  Sparkles,
+  Lock,
+  KeyRound,
+  AlertCircle
 } from 'lucide-react';
 
 export default function SettingsModal({ isOpen, onClose, onSettingsUpdated }) {
@@ -29,6 +32,55 @@ export default function SettingsModal({ isOpen, onClose, onSettingsUpdated }) {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
+
+  // Password Change State
+  const [passwords, setPasswords] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [passMsg, setPassMsg] = useState('');
+  const [passError, setPassError] = useState('');
+  const [changingPass, setChangingPass] = useState(false);
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    setPassMsg('');
+    setPassError('');
+
+    if (!passwords.currentPassword || !passwords.newPassword) {
+      setPassError('Current password and new password are required');
+      return;
+    }
+    if (passwords.newPassword.length < 4) {
+      setPassError('New password must be at least 4 characters long');
+      return;
+    }
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      setPassError('New password and confirmation do not match');
+      return;
+    }
+
+    setChangingPass(true);
+    try {
+      const res = await fetch('/api/auth/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(passwords)
+      });
+      const data = await res.json();
+      if (data.success) {
+        setPassMsg('Password changed successfully!');
+        setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      } else {
+        setPassError(data.message || 'Failed to change password');
+      }
+    } catch (err) {
+      setPassError(err.message);
+    } finally {
+      setChangingPass(false);
+    }
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -276,6 +328,74 @@ export default function SettingsModal({ isOpen, onClose, onSettingsUpdated }) {
 
             <div className="text-[11px] text-slate-500">
               Placeholders: <span className="text-emerald-400 font-mono">&#123;BORROWER_NAME&#125;</span>, <span className="text-emerald-400 font-mono">&#123;INTEREST_AMOUNT&#125;</span>, <span className="text-emerald-400 font-mono">&#123;LOAN_ID&#125;</span>, <span className="text-emerald-400 font-mono">&#123;DUE_DATE&#125;</span>, <span className="text-emerald-400 font-mono">&#123;UPI_ID&#125;</span>, <span className="text-emerald-400 font-mono">&#123;LENDER_NAME&#125;</span>
+            </div>
+          </div>
+
+          {/* 4. Account Security & Change Password */}
+          <div className="p-4 bg-slate-800/40 rounded-2xl border border-slate-800 space-y-3">
+            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-indigo-400" />
+              Change Login Password
+            </h4>
+
+            {passMsg && (
+              <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 shrink-0" />
+                <span>{passMsg}</span>
+              </div>
+            )}
+
+            {passError && (
+              <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>{passError}</span>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label className="block text-xs text-slate-400 mb-1">Current Password</label>
+                <input
+                  type="password"
+                  placeholder="Enter current password"
+                  value={passwords.currentPassword}
+                  onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs text-slate-400 mb-1">New Password</label>
+                <input
+                  type="password"
+                  placeholder="Min 4 characters"
+                  value={passwords.newPassword}
+                  onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs text-slate-400 mb-1">Confirm New Password</label>
+                <input
+                  type="password"
+                  placeholder="Re-enter new password"
+                  value={passwords.confirmPassword}
+                  onChange={(e) => setPasswords({ ...passwords, confirmPassword: e.target.value })}
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-1">
+              <button
+                type="button"
+                onClick={handleChangePassword}
+                disabled={changingPass}
+                className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white font-bold text-xs shadow-md shadow-indigo-500/20 transition-all cursor-pointer disabled:opacity-50"
+              >
+                {changingPass ? 'Updating...' : 'Update Password'}
+              </button>
             </div>
           </div>
 

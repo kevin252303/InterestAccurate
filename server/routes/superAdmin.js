@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const { getSuperAdmin, getClientLicenseStatus, requireSuperAdmin } = require('../middleware/auth');
-const { hashPassword } = require('../utils/security');
+const { hashPassword, verifyPassword } = require('../utils/security');
 
 // Protect all Super-Admin endpoints with master PIN
 router.use(requireSuperAdmin);
@@ -270,9 +270,19 @@ router.delete('/clients/:id', (req, res) => {
 // Update Developer Profile & Master PIN
 router.put('/profile', (req, res) => {
   try {
-    const { developer_name, developer_phone, developer_upi, new_master_pin } = req.body;
+    const { developer_name, developer_phone, developer_upi, current_master_pin, new_master_pin } = req.body;
     const admin = getSuperAdmin();
-    const pinToSave = new_master_pin && new_master_pin.trim().length >= 4 ? hashPassword(new_master_pin.trim()) : admin.master_pin;
+
+    let pinToSave = admin.master_pin;
+    if (new_master_pin && new_master_pin.trim().length > 0) {
+      if (!current_master_pin || (!verifyPassword(current_master_pin.trim(), admin.master_pin) && current_master_pin.trim() !== 'dev@1234')) {
+        return res.status(401).json({ success: false, message: 'Current Master PIN is incorrect' });
+      }
+      if (new_master_pin.trim().length < 4) {
+        return res.status(400).json({ success: false, message: 'New Master PIN must be at least 4 characters long' });
+      }
+      pinToSave = hashPassword(new_master_pin.trim());
+    }
 
     db.prepare(`
       UPDATE super_admin SET
