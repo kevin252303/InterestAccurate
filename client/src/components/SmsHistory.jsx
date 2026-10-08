@@ -46,33 +46,33 @@ export default function SmsHistory({ logs = [], onRefresh, onRunCheck }) {
       {/* Header & Rule Summary Banner */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Left 2 Cols: Title and Trigger */}
-        <div className="lg:col-span-2 bg-slate-800/40 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-4">
+        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between space-y-4">
           <div>
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <MessageSquare className="w-6 h-6 text-emerald-400" />
+            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <MessageSquare className="w-6 h-6 text-emerald-600" />
               Automated SMS & Reminders Center
             </h2>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 mt-1">
               Audit trail of every reminder message sent to borrowers and alert sent to the lender.
             </p>
           </div>
 
           {/* Schedule Engine Control */}
-          <div className="pt-3 border-t border-slate-700/60 flex flex-wrap items-center gap-3">
+          <div className="pt-3 border-t border-slate-200 flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400 font-medium">Test Date:</span>
+              <span className="text-xs text-slate-600 font-medium">Test Date:</span>
               <input
                 type="date"
                 value={simDate}
                 onChange={(e) => setSimDate(e.target.value)}
-                className="bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-500"
+                className="bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-slate-900 text-xs focus:outline-none focus:border-emerald-600"
               />
             </div>
 
             <button
               onClick={handleTriggerCheck}
               disabled={runningCheck}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white font-bold text-xs shadow-md shadow-indigo-500/20 transition-all cursor-pointer disabled:opacity-50"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-xs transition-all cursor-pointer disabled:opacity-50"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${runningCheck ? 'animate-spin' : ''}`} />
               <span>{runningCheck ? 'Checking...' : 'Run Due Date Check Now'}</span>
@@ -80,7 +80,7 @@ export default function SmsHistory({ logs = [], onRefresh, onRunCheck }) {
 
             <button
               onClick={onRefresh}
-              className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition-colors cursor-pointer"
+              className="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs transition-colors cursor-pointer border border-slate-200"
               title="Refresh Logs"
             >
               <RefreshCw className="w-4 h-4" />
@@ -88,36 +88,36 @@ export default function SmsHistory({ logs = [], onRefresh, onRunCheck }) {
           </div>
 
           {resultMsg && (
-            <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold">
+            <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold">
               {resultMsg}
             </div>
           )}
         </div>
 
         {/* Right 1 Col: Rule Badges */}
-        <div className="bg-slate-800/40 p-5 rounded-2xl border border-slate-800 space-y-3 text-xs">
-          <div className="font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-emerald-400" />
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3 text-xs">
+          <div className="font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+            <Sparkles className="w-4 h-4 text-emerald-600" />
             Active Automation Rules
           </div>
 
-          <div className="p-3 bg-slate-900/60 rounded-xl border border-slate-800 space-y-1">
-            <div className="font-bold text-indigo-400 flex items-center gap-1.5">
+          <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+            <div className="font-bold text-indigo-700 flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5" />
               1 Day Before Due Date
             </div>
-            <p className="text-slate-400 text-[11px]">
-              Sends automated reminder SMS to the <span className="text-white font-semibold">Borrower</span> with payment UPI & due amount.
+            <p className="text-slate-600 text-[11px]">
+              Sends automated reminder SMS to the <span className="text-slate-900 font-semibold">Borrower</span> with payment UPI & due amount.
             </p>
           </div>
 
-          <div className="p-3 bg-slate-900/60 rounded-xl border border-slate-800 space-y-1">
-            <div className="font-bold text-emerald-400 flex items-center gap-1.5">
+          <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+            <div className="font-bold text-emerald-700 flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5" />
               On Due Date
             </div>
-            <p className="text-slate-400 text-[11px]">
-              Sends collection alert SMS to the <span className="text-white font-semibold">Lender</span> with borrower details.
+            <p className="text-slate-600 text-[11px]">
+              Sends collection alert SMS to the <span className="text-slate-900 font-semibold">Lender</span> with borrower details.
             </p>
           </div>
         </div>
@@ -125,17 +125,17 @@ export default function SmsHistory({ logs = [], onRefresh, onRunCheck }) {
 
       {/* SMS Logs Table */}
       {logs.length === 0 ? (
-        <div className="text-center py-16 bg-slate-800/20 rounded-2xl border border-slate-800">
-          <MessageSquare className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-          <p className="text-sm font-semibold text-slate-400">No SMS logs yet</p>
-          <p className="text-xs text-slate-500 mt-1">
+        <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <MessageSquare className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+          <p className="text-sm font-semibold text-slate-600">No SMS logs yet</p>
+          <p className="text-xs text-slate-400 mt-1">
             Click "Run Due Date Check Now" or send a manual reminder from any loan card.
           </p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-800/40">
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-xs">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-800/90 text-slate-400 uppercase tracking-wider border-b border-slate-800">
+            <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider border-b border-slate-200">
               <tr>
                 <th className="p-3.5">Sent Time</th>
                 <th className="p-3.5">Recipient</th>
@@ -145,18 +145,18 @@ export default function SmsHistory({ logs = [], onRefresh, onRunCheck }) {
                 <th className="p-3.5">Message Content</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 bg-slate-900/30">
+            <tbody className="divide-y divide-slate-100 bg-white">
               {logs.map((log) => (
-                <tr key={log.id} className="hover:bg-slate-800/40 transition-colors">
-                  <td className="p-3.5 text-slate-400 whitespace-nowrap">
+                <tr key={log.id} className="hover:bg-slate-50/80 transition-colors">
+                  <td className="p-3.5 text-slate-600 whitespace-nowrap">
                     {formatDateTime(log.sent_at)}
                   </td>
 
                   <td className="p-3.5">
-                    <div className="font-bold text-white">
+                    <div className="font-bold text-slate-900">
                       {log.recipient_name || log.borrower_name || 'Financier'}
                     </div>
-                    <div className="text-slate-400 font-mono text-[11px] mt-0.5">
+                    <div className="text-slate-500 font-mono text-[11px] mt-0.5">
                       {log.recipient_phone}
                     </div>
                   </td>
@@ -164,14 +164,14 @@ export default function SmsHistory({ logs = [], onRefresh, onRunCheck }) {
                   <td className="p-3.5">
                     <span className={`px-2 py-0.5 rounded-md font-bold text-[10px] ${
                       log.recipient_type === 'BORROWER'
-                        ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
-                        : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                        ? 'bg-indigo-50 text-indigo-700 border border-indigo-200'
+                        : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                     }`}>
                       {log.recipient_type}
                     </span>
                   </td>
 
-                  <td className="p-3.5 text-slate-400">
+                  <td className="p-3.5 text-slate-600">
                     <span className="text-[11px] font-mono">
                       {log.trigger_type}
                     </span>
@@ -179,16 +179,16 @@ export default function SmsHistory({ logs = [], onRefresh, onRunCheck }) {
 
                   <td className="p-3.5">
                     <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
-                      log.status === 'SENT' ? 'bg-emerald-500/10 text-emerald-400' :
-                      log.status === 'SIMULATED' ? 'bg-teal-500/10 text-teal-300 border border-teal-500/20' :
-                      'bg-rose-500/10 text-rose-400'
+                      log.status === 'SENT' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                      log.status === 'SIMULATED' ? 'bg-teal-50 text-teal-700 border border-teal-200' :
+                      'bg-rose-50 text-rose-700 border border-rose-200'
                     }`}>
                       {log.status === 'SIMULATED' ? 'SIMULATOR (OK)' : log.status}
                     </span>
                   </td>
 
                   <td className="p-3.5 max-w-md">
-                    <p className="text-slate-300 text-xs bg-slate-950/60 p-2 rounded-lg border border-slate-800 whitespace-pre-wrap font-mono">
+                    <p className="text-slate-800 text-xs bg-slate-50 p-2.5 rounded-lg border border-slate-200 whitespace-pre-wrap font-mono">
                       {log.message_text}
                     </p>
                   </td>

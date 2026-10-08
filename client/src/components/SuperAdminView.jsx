@@ -321,12 +321,12 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
   });
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col antialiased">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col antialiased">
       {/* Toast Alert */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 animate-bounce">
           <div className={`px-4 py-3 rounded-2xl shadow-xl border text-sm font-semibold flex items-center gap-2 ${
-            toast.type === 'error' ? 'bg-rose-950 border-rose-500/50 text-rose-300' : 'bg-emerald-950 border-emerald-500/50 text-emerald-300'
+            toast.type === 'error' ? 'bg-rose-50 border-rose-200 text-rose-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700'
           }`}>
             <span>{toast.message}</span>
           </div>
@@ -334,35 +334,35 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
       )}
 
       {/* Top Header */}
-      <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur border-b border-slate-800">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-400 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-amber-500/20">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-400 flex items-center justify-center text-slate-950 font-black shadow-md shadow-amber-500/20">
                 <KeyRound className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-lg text-white">Developer Super-Admin Hub</span>
-                  <span className="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                  <span className="font-bold text-lg text-slate-900">Developer Super-Admin Hub</span>
+                  <span className="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
                     Master Mode
                   </span>
                 </div>
-                <p className="text-xs text-slate-400">Multi-Client Subscription & Monetization Control</p>
+                <p className="text-xs text-slate-500">Multi-Client Subscription & Monetization Control</p>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setIsEditProfileOpen(true)}
-                className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer"
+                className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-slate-200 transition-colors cursor-pointer"
               >
                 Developer Profile & UPI
               </button>
 
               <button
                 onClick={onLogout}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs font-bold border border-rose-500/20 transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold border border-rose-200 transition-colors cursor-pointer"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Logout</span>
@@ -376,34 +376,34 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* KPI Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-5 rounded-2xl bg-slate-800/50 border border-slate-800">
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Total Active Clients</div>
-            <div className="text-3xl font-black text-white">{data?.metrics?.activeClients ?? 0}</div>
-            <div className="text-xs text-slate-500 mt-1">out of {data?.metrics?.totalClients ?? 0} registered</div>
+          <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Total Active Clients</div>
+            <div className="text-3xl font-black text-slate-900">{data?.metrics?.activeClients ?? 0}</div>
+            <div className="text-xs text-slate-400 mt-1">out of {data?.metrics?.totalClients ?? 0} registered</div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-800/50 border border-emerald-500/30">
-            <div className="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-2">Monthly Recurring Revenue (MRR)</div>
-            <div className="text-3xl font-black text-emerald-400">{formatCurrency(data?.metrics?.totalMRR ?? 0)}</div>
+          <div className="p-5 rounded-2xl bg-white border border-emerald-200 shadow-xs">
+            <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-2">Monthly Recurring Revenue (MRR)</div>
+            <div className="text-3xl font-black text-emerald-700">{formatCurrency(data?.metrics?.totalMRR ?? 0)}</div>
             <div className="text-xs text-slate-500 mt-1">Expected monthly subscription fees</div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-800/50 border border-amber-500/30">
-            <div className="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-2">Expiring Soon (≤ 7 Days)</div>
-            <div className="text-3xl font-black text-amber-400">{data?.metrics?.expiringSoon ?? 0}</div>
+          <div className="p-5 rounded-2xl bg-white border border-amber-200 shadow-xs">
+            <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-2">Expiring Soon (≤ 7 Days)</div>
+            <div className="text-3xl font-black text-amber-700">{data?.metrics?.expiringSoon ?? 0}</div>
             <div className="text-xs text-slate-500 mt-1">Clients due for renewal follow-up</div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-800/50 border border-rose-500/30">
-            <div className="text-xs font-semibold text-rose-400 uppercase tracking-wider mb-2">Expired / Locked Clients</div>
-            <div className="text-3xl font-black text-rose-400">{data?.metrics?.expiredOrSuspended ?? 0}</div>
+          <div className="p-5 rounded-2xl bg-white border border-rose-200 shadow-xs">
+            <div className="text-xs font-semibold text-rose-700 uppercase tracking-wider mb-2">Expired / Locked Clients</div>
+            <div className="text-3xl font-black text-rose-700">{data?.metrics?.expiredOrSuspended ?? 0}</div>
             <div className="text-xs text-slate-500 mt-1">Currently locked out (unpaid)</div>
           </div>
         </div>
 
         {/* Client Directory & Action Bar */}
         <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-800/40 p-5 rounded-2xl border border-slate-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
             <div className="flex items-center gap-3">
               <div className="relative w-full sm:w-72">
                 <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -412,13 +412,13 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
                   placeholder="Search clients by name, phone..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:bg-white"
                 />
               </div>
 
               <button
                 onClick={fetchDashboard}
-                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors cursor-pointer"
+                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-200 transition-colors cursor-pointer"
                 title="Refresh List"
               >
                 <RefreshCw className="w-4 h-4" />
@@ -427,7 +427,7 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
 
             <button
               onClick={() => setIsAddClientOpen(true)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition-all cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 transition-all cursor-pointer whitespace-nowrap"
             >
               <PlusCircle className="w-4 h-4" />
               <span>+ Add New Client</span>
@@ -435,9 +435,9 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
           </div>
 
           {/* Clients Master Table */}
-          <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-800/30">
+          <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-xs">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-800/90 text-slate-400 uppercase tracking-wider border-b border-slate-800">
+              <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider border-b border-slate-200 font-semibold">
                 <tr>
                   <th className="p-4">Client / Firm</th>
                   <th className="p-4">Owner & Phone</th>
@@ -448,42 +448,42 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
                   <th className="p-4 text-center">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 bg-slate-900/30">
+              <tbody className="divide-y divide-slate-100 bg-white">
                 {filteredClients.map((client) => {
                   const lic = client.license || {};
                   return (
-                    <tr key={client.id} className="hover:bg-slate-800/30 transition-colors">
+                    <tr key={client.id} className="hover:bg-slate-50/80 transition-colors">
                       <td className="p-4">
-                        <div className="font-bold text-white text-sm flex items-center gap-1.5">
+                        <div className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
                           <span>{client.business_name}</span>
-                          <span className="text-[10px] text-slate-500 font-mono">#{client.id}</span>
+                          <span className="text-[10px] text-slate-400 font-mono">#{client.id}</span>
                         </div>
-                        <div className="text-slate-400 text-[11px] mt-0.5">
-                          Pass: <code className="text-amber-300 bg-slate-950 px-1 py-0.5 rounded">{client.password}</code>
+                        <div className="text-slate-500 text-[11px] mt-0.5">
+                          Pass: <code className="text-amber-800 bg-amber-50 px-1 py-0.5 rounded border border-amber-200 font-mono">{client.password}</code>
                         </div>
                       </td>
 
                       <td className="p-4">
-                        <div className="text-white font-medium">{client.owner_name}</div>
-                        <div className="text-slate-400 font-mono text-[11px] flex items-center gap-1 mt-0.5">
-                          <Phone className="w-3 h-3 text-emerald-400" />
+                        <div className="text-slate-900 font-medium">{client.owner_name}</div>
+                        <div className="text-slate-500 font-mono text-[11px] flex items-center gap-1 mt-0.5">
+                          <Phone className="w-3 h-3 text-emerald-600" />
                           <span>{client.phone}</span>
                         </div>
                       </td>
 
                       <td className="p-4">
-                        <div className="font-bold text-emerald-400">{formatCurrency(client.subscription_fee)}</div>
+                        <div className="font-bold text-emerald-700">{formatCurrency(client.subscription_fee)}</div>
                         <div className="text-slate-400 text-[10px] uppercase tracking-wider">{client.plan_type}</div>
                       </td>
 
                       <td className="p-4">
-                        <div className="font-medium text-white">{formatDate(client.valid_until)}</div>
+                        <div className="font-medium text-slate-900">{formatDate(client.valid_until)}</div>
                         <div className="mt-1">
                           <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
-                            lic.isSuspended ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
-                            lic.isExpired ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
-                            lic.isGracePeriod ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                            'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                            lic.isSuspended ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                            lic.isExpired ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                            lic.isGracePeriod ? 'bg-amber-50 text-amber-800 border border-amber-200' :
+                            'bg-emerald-50 text-emerald-700 border border-emerald-200'
                           }`}>
                             {lic.isSuspended ? 'SUSPENDED' :
                              lic.isExpired ? 'EXPIRED' :
@@ -494,7 +494,7 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
                       </td>
 
                       <td className="p-4 text-right">
-                        <div className="font-bold text-white text-sm">{client.activeLoansCount || 0} Loans</div>
+                        <div className="font-bold text-slate-900 text-sm">{client.activeLoansCount || 0} Loans</div>
                         <div className="text-slate-400 text-[11px]">{formatCurrency(client.totalCapitalDeployed || 0)}</div>
                       </td>
 
@@ -503,7 +503,7 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
                           <button
                             onClick={() => handleRenewClient(client.id, 30)}
                             title="Renew +30 Days"
-                            className="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold transition-colors cursor-pointer"
+                            className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold transition-colors cursor-pointer"
                           >
                             +30d
                           </button>
@@ -511,7 +511,7 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
                           <button
                             onClick={() => handleRenewClient(client.id, 365)}
                             title="Renew +365 Days (1 Year)"
-                            className="px-2.5 py-1 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold transition-colors cursor-pointer"
+                            className="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold transition-colors cursor-pointer"
                           >
                             +1yr
                           </button>
@@ -520,7 +520,7 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
                             <button
                               onClick={() => handleReactivateClient(client.id)}
                               title="Reactivate Access"
-                              className="p-1 rounded-lg bg-emerald-500 text-slate-950 hover:bg-emerald-400 cursor-pointer"
+                              className="p-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 cursor-pointer shadow-xs"
                             >
                               <Unlock className="w-3.5 h-3.5" />
                             </button>
@@ -528,7 +528,7 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
                             <button
                               onClick={() => handleSuspendClient(client.id)}
                               title="Suspend / Lock Client"
-                              className="p-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 cursor-pointer"
+                              className="p-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 cursor-pointer"
                             >
                               <Lock className="w-3.5 h-3.5" />
                             </button>
@@ -540,7 +540,7 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
                         <div className="flex items-center justify-center gap-2">
                           <button
                             onClick={() => onLoginAsClient(client)}
-                            className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                            className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-amber-800 border border-slate-200 font-bold text-xs transition-colors cursor-pointer"
                             title="Open Client's Lending Dashboard"
                           >
                             <span>Open App</span>
@@ -553,7 +553,7 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
                               setClientNewPassword('');
                               setClientConfirmPassword('');
                             }}
-                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-400/80 hover:text-amber-300 border border-slate-700 cursor-pointer transition-colors"
+                            className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-amber-800 border border-slate-200 cursor-pointer transition-colors"
                             title="Reset / Change Client Password"
                           >
                             <KeyRound className="w-3.5 h-3.5" />
@@ -563,7 +563,7 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
                             <button
                               onClick={() => handleDeleteClient(client.id)}
                               title="Delete Client"
-                              className="p-1 rounded-lg text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"
+                              className="p-1 rounded-lg text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -581,76 +581,76 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
 
       {/* Add Client Modal */}
       {isAddClientOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/95">
-              <h3 className="font-bold text-white text-base flex items-center gap-2">
-                <Building className="w-5 h-5 text-amber-400" />
-                Onboard New Client (Financier)
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50">
+              <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <Building className="w-5 h-5 text-amber-600" />
+                <span>Onboard New Client (Financier)</span>
               </h3>
-              <button onClick={() => setIsAddClientOpen(false)} className="text-slate-400 hover:text-white cursor-pointer">
+              <button onClick={() => setIsAddClientOpen(false)} className="text-slate-400 hover:text-slate-700 cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleCreateClient} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs text-slate-400 mb-1">Business / Firm Name *</label>
+                <label className="block text-xs text-slate-600 font-semibold mb-1">Business / Firm Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Sharma Capital & Credit"
                   value={newClient.business_name}
                   onChange={(e) => setNewClient({ ...newClient, business_name: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">Owner Name *</label>
+                  <label className="block text-xs text-slate-600 font-semibold mb-1">Owner Name *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Ashok Sharma"
                     value={newClient.owner_name}
                     onChange={(e) => setNewClient({ ...newClient, owner_name: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">Login Mobile Phone *</label>
+                  <label className="block text-xs text-slate-600 font-semibold mb-1">Login Mobile Phone *</label>
                   <input
                     type="tel"
                     required
                     placeholder="e.g. 9845012345"
                     value={newClient.phone}
                     onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">Client Password *</label>
+                  <label className="block text-xs text-slate-600 font-semibold mb-1">Client Password *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. sharma@123"
                     value={newClient.password}
                     onChange={(e) => setNewClient({ ...newClient, password: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">Subscription Plan</label>
+                  <label className="block text-xs text-slate-600 font-semibold mb-1">Subscription Plan</label>
                   <select
                     value={newClient.plan_type}
                     onChange={(e) => setNewClient({ ...newClient, plan_type: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                   >
                     <option value="MONTHLY">Monthly</option>
                     <option value="YEARLY">Yearly</option>
@@ -661,22 +661,22 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">Subscription Fee (₹)</label>
+                  <label className="block text-xs text-slate-600 font-semibold mb-1">Subscription Fee (₹)</label>
                   <input
                     type="number"
                     value={newClient.subscription_fee}
                     onChange={(e) => setNewClient({ ...newClient, subscription_fee: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">Initial Validity (Days)</label>
+                  <label className="block text-xs text-slate-600 font-semibold mb-1">Initial Validity (Days)</label>
                   <input
                     type="number"
                     value={newClient.valid_days}
                     onChange={(e) => setNewClient({ ...newClient, valid_days: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                   />
                 </div>
               </div>
@@ -685,14 +685,14 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
                 <button
                   type="button"
                   onClick={() => setIsAddClientOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white cursor-pointer"
+                  className="px-4 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 cursor-pointer"
                 >
                   {actionLoading ? 'Creating...' : 'Create Client'}
                 </button>
@@ -704,83 +704,83 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
 
       {/* Edit Profile Modal */}
       {isEditProfileOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/95">
-              <h3 className="font-bold text-white text-base">Developer Profile & UPI Settings</h3>
-              <button onClick={() => setIsEditProfileOpen(false)} className="text-slate-400 hover:text-white cursor-pointer">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50">
+              <h3 className="font-bold text-slate-900 text-base">Developer Profile & UPI Settings</h3>
+              <button onClick={() => setIsEditProfileOpen(false)} className="text-slate-400 hover:text-slate-700 cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleSaveProfile} className="p-6 space-y-4 text-xs">
               <div>
-                <label className="block text-slate-400 mb-1">Developer Contact Name</label>
+                <label className="block text-slate-600 font-semibold mb-1">Developer Contact Name</label>
                 <input
                   type="text"
                   value={profileForm.developer_name}
                   onChange={(e) => setProfileForm({ ...profileForm, developer_name: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1">Developer Mobile Phone (Receives Calls & WhatsApp)</label>
+                <label className="block text-slate-600 font-semibold mb-1">Developer Mobile Phone (Receives Calls & WhatsApp)</label>
                 <input
                   type="tel"
                   value={profileForm.developer_phone}
                   onChange={(e) => setProfileForm({ ...profileForm, developer_phone: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1">Developer Payment UPI ID (Shown on client lockout screen)</label>
+                <label className="block text-slate-600 font-semibold mb-1">Developer Payment UPI ID (Shown on client lockout screen)</label>
                 <input
                   type="text"
                   value={profileForm.developer_upi}
                   onChange={(e) => setProfileForm({ ...profileForm, developer_upi: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                 />
               </div>
 
-              <div className="pt-2 border-t border-slate-800 space-y-3">
-                <div className="font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <KeyRound className="w-3.5 h-3.5 text-amber-400" />
+              <div className="pt-2 border-t border-slate-200 space-y-3">
+                <div className="font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <KeyRound className="w-3.5 h-3.5 text-amber-600" />
                   <span>Change Super-Admin Master PIN</span>
                 </div>
 
                 <div>
-                  <label className="block text-slate-400 mb-1">Current Master PIN</label>
+                  <label className="block text-slate-600 font-semibold mb-1">Current Master PIN</label>
                   <input
                     type="password"
                     placeholder="Enter current PIN to confirm"
                     value={profileForm.current_master_pin || ''}
                     onChange={(e) => setProfileForm({ ...profileForm, current_master_pin: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                    className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-slate-400 mb-1">New Master PIN</label>
+                    <label className="block text-slate-600 font-semibold mb-1">New Master PIN</label>
                     <input
                       type="password"
                       placeholder="Min 4 chars"
                       value={profileForm.new_master_pin || ''}
                       onChange={(e) => setProfileForm({ ...profileForm, new_master_pin: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-slate-400 mb-1">Confirm New PIN</label>
+                    <label className="block text-slate-600 font-semibold mb-1">Confirm New PIN</label>
                     <input
                       type="password"
                       placeholder="Re-enter new PIN"
                       value={profileForm.confirm_master_pin || ''}
                       onChange={(e) => setProfileForm({ ...profileForm, confirm_master_pin: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                     />
                   </div>
                 </div>
@@ -790,14 +790,14 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
                 <button
                   type="button"
                   onClick={() => setIsEditProfileOpen(false)}
-                  className="px-4 py-2 font-semibold text-slate-400 hover:text-white cursor-pointer"
+                  className="px-4 py-2 font-semibold text-slate-500 hover:text-slate-800 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold shadow-md shadow-amber-500/20 cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold shadow-md shadow-amber-500/20 cursor-pointer"
                 >
                   Save Profile
                 </button>
@@ -809,49 +809,49 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
 
       {/* Reset Client Password Modal */}
       {resetPasswordClient && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/95">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50">
               <div className="flex items-center gap-2">
-                <KeyRound className="w-5 h-5 text-amber-400" />
-                <h3 className="font-bold text-white text-base">Reset Client Password</h3>
+                <KeyRound className="w-5 h-5 text-amber-600" />
+                <h3 className="font-bold text-slate-900 text-base">Reset Client Password</h3>
               </div>
               <button 
                 onClick={() => setResetPasswordClient(null)} 
-                className="text-slate-400 hover:text-white cursor-pointer"
+                className="text-slate-400 hover:text-slate-700 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleAdminResetClientPassword} className="p-6 space-y-4 text-xs">
-              <div className="p-3 bg-slate-800/40 rounded-xl border border-slate-800 space-y-1">
-                <div className="text-slate-400">Client Firm:</div>
-                <div className="text-white font-bold text-sm">{resetPasswordClient.business_name}</div>
-                <div className="text-slate-400 text-[11px]">Owner: {resetPasswordClient.owner_name} • Phone: {resetPasswordClient.phone}</div>
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                <div className="text-slate-500">Client Firm:</div>
+                <div className="text-slate-900 font-bold text-sm">{resetPasswordClient.business_name}</div>
+                <div className="text-slate-500 text-[11px]">Owner: {resetPasswordClient.owner_name} • Phone: {resetPasswordClient.phone}</div>
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1 font-semibold">New Password *</label>
+                <label className="block text-slate-600 mb-1 font-semibold">New Password *</label>
                 <input
                   type="password"
                   required
                   placeholder="Min 4 characters"
                   value={clientNewPassword}
                   onChange={(e) => setClientNewPassword(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1 font-semibold">Confirm New Password *</label>
+                <label className="block text-slate-600 mb-1 font-semibold">Confirm New Password *</label>
                 <input
                   type="password"
                   required
                   placeholder="Re-enter new password"
                   value={clientConfirmPassword}
                   onChange={(e) => setClientConfirmPassword(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                 />
               </div>
 
@@ -859,14 +859,14 @@ export default function SuperAdminView({ masterPin, onLogout, onLoginAsClient, o
                 <button
                   type="button"
                   onClick={() => setResetPasswordClient(null)}
-                  className="px-4 py-2 font-semibold text-slate-400 hover:text-white cursor-pointer"
+                  className="px-4 py-2 font-semibold text-slate-500 hover:text-slate-800 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold shadow-md shadow-amber-500/20 cursor-pointer disabled:opacity-50"
+                  className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold shadow-md shadow-amber-500/20 cursor-pointer disabled:opacity-50"
                 >
                   {actionLoading ? 'Updating...' : 'Set Password'}
                 </button>

@@ -271,14 +271,14 @@ export default function App() {
 
   // 3. Client Lending Workspace
   return (
-    <div className="min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col antialiased selection:bg-emerald-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
       {/* Toast Alert */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 animate-bounce">
           <div className={`px-4 py-3 rounded-2xl shadow-xl border text-sm font-semibold flex items-center gap-2 ${
             toast.type === 'error'
-              ? 'bg-rose-950 border-rose-500/50 text-rose-300'
-              : 'bg-emerald-950 border-emerald-500/50 text-emerald-300'
+              ? 'bg-rose-50 border-rose-200 text-rose-800'
+              : 'bg-emerald-50 border-emerald-200 text-emerald-800'
           }`}>
             <span>{toast.message}</span>
           </div>
@@ -287,14 +287,14 @@ export default function App() {
 
       {/* Developer Impersonation Top Banner (if developer logged in as client) */}
       {session.isImpersonating && (
-        <div className="bg-amber-500 text-slate-950 px-4 py-1.5 text-xs font-bold flex items-center justify-between shadow-md">
+        <div className="bg-amber-400 text-amber-950 px-4 py-1.5 text-xs font-bold flex items-center justify-between shadow-xs border-b border-amber-300">
           <div className="flex items-center gap-2">
             <span>👑 Developer Support Mode:</span>
             <span>Viewing as {session.client?.businessName} (Client #{session.clientId})</span>
           </div>
           <button
             onClick={handleReturnToAdmin}
-            className="px-2.5 py-0.5 rounded-md bg-slate-950 text-amber-400 font-bold hover:bg-slate-900 transition-colors cursor-pointer"
+            className="px-2.5 py-0.5 rounded-md bg-amber-900 text-white font-bold hover:bg-amber-800 transition-colors cursor-pointer"
           >
             ← Return to Super-Admin Hub
           </button>

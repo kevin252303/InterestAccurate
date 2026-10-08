@@ -128,22 +128,22 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6">
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6">
+      <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/90">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-white">
           <div>
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-emerald-400" />
+            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-emerald-600" />
               Disburse New Loan & Borrower Intake
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               Record borrower KYC, collateral security, and interest terms.
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -152,7 +152,7 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
         {/* Scrollable Form Content */}
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6">
           {error && (
-            <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-medium">
+            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
               {error}
             </div>
           )}
@@ -160,17 +160,17 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
           {/* Section 1: Borrower Selection / Onboarding */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <Users className="w-4 h-4 text-emerald-400" />
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                <Users className="w-4 h-4 text-emerald-600" />
                 1. Borrower Information (KYC)
               </span>
 
-              <div className="flex items-center gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700">
+              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
                 <button
                   type="button"
                   onClick={() => setBorrowerMode('new')}
                   className={`px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
-                    borrowerMode === 'new' ? 'bg-emerald-500 text-slate-950 shadow' : 'text-slate-400 hover:text-white'
+                    borrowerMode === 'new' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   + New Borrower
@@ -179,7 +179,7 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
                   type="button"
                   onClick={() => setBorrowerMode('existing')}
                   className={`px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
-                    borrowerMode === 'existing' ? 'bg-emerald-500 text-slate-950 shadow' : 'text-slate-400 hover:text-white'
+                    borrowerMode === 'existing' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   Existing ({existingBorrowers.length})
@@ -188,12 +188,12 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
             </div>
 
             {borrowerMode === 'existing' ? (
-              <div className="p-4 bg-slate-800/40 rounded-2xl border border-slate-800">
-                <label className="block text-xs text-slate-400 mb-1">Select Borrower</label>
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                <label className="block text-xs text-slate-600 mb-1">Select Borrower</label>
                 <select
                   value={selectedBorrowerId}
                   onChange={(e) => setSelectedBorrowerId(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                   required
                 >
                   <option value="">-- Choose Borrower --</option>
@@ -205,60 +205,60 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
                 </select>
               </div>
             ) : (
-              <div className="p-5 bg-slate-800/40 rounded-2xl border border-slate-800 space-y-4">
+              <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">Full Name *</label>
+                    <label className="block text-xs text-slate-600 mb-1">Full Name *</label>
                     <input
                       type="text"
                       required
                       placeholder="e.g. Ramesh Kumar"
                       value={borrowerForm.name}
                       onChange={(e) => setBorrowerForm({ ...borrowerForm, name: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">Known As / Nickname</label>
+                    <label className="block text-xs text-slate-600 mb-1">Known As / Nickname</label>
                     <input
                       type="text"
                       placeholder="e.g. Tea Stall Ramesh"
                       value={borrowerForm.alias}
                       onChange={(e) => setBorrowerForm({ ...borrowerForm, alias: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">Mobile Phone (For SMS) *</label>
+                    <label className="block text-xs text-slate-600 mb-1">Mobile Phone (For SMS) *</label>
                     <input
                       type="tel"
                       required
                       placeholder="e.g. 9876543210"
                       value={borrowerForm.phone}
                       onChange={(e) => setBorrowerForm({ ...borrowerForm, phone: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">Alt Phone / WhatsApp</label>
+                    <label className="block text-xs text-slate-600 mb-1">Alt Phone / WhatsApp</label>
                     <input
                       type="tel"
                       placeholder="e.g. 9876500000"
                       value={borrowerForm.alt_phone}
                       onChange={(e) => setBorrowerForm({ ...borrowerForm, alt_phone: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">ID Proof Type</label>
+                    <label className="block text-xs text-slate-600 mb-1">ID Proof Type</label>
                     <select
                       value={borrowerForm.id_type}
                       onChange={(e) => setBorrowerForm({ ...borrowerForm, id_type: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                     >
                       <option value="Aadhaar">Aadhaar Card</option>
                       <option value="PAN">PAN Card</option>
@@ -269,44 +269,44 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
                   </div>
 
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">ID Number</label>
+                    <label className="block text-xs text-slate-600 mb-1">ID Number</label>
                     <input
                       type="text"
                       placeholder="e.g. 1234 5678 9012"
                       value={borrowerForm.id_number}
                       onChange={(e) => setBorrowerForm({ ...borrowerForm, id_number: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">Residential Address</label>
+                    <label className="block text-xs text-slate-600 mb-1">Residential Address</label>
                     <textarea
                       rows="2"
                       placeholder="House no, Street, Landmark, Village/City"
                       value={borrowerForm.residential_address}
                       onChange={(e) => setBorrowerForm({ ...borrowerForm, residential_address: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">Work / Business Address</label>
+                    <label className="block text-xs text-slate-600 mb-1">Work / Business Address</label>
                     <textarea
                       rows="2"
                       placeholder="Shop name, Office, Business location"
                       value={borrowerForm.work_address}
                       onChange={(e) => setBorrowerForm({ ...borrowerForm, work_address: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl p-2.5 text-slate-900 text-xs focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                     />
                   </div>
                 </div>
 
                 {/* Guarantor Details */}
-                <div className="pt-3 border-t border-slate-700/60">
-                  <div className="text-xs font-semibold text-slate-300 mb-2.5">
+                <div className="pt-3 border-t border-slate-200">
+                  <div className="text-xs font-semibold text-slate-700 mb-2.5">
                     Guarantor / Surety Information (Optional)
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -316,7 +316,7 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
                         placeholder="Guarantor Name"
                         value={borrowerForm.guarantor_name}
                         onChange={(e) => setBorrowerForm({ ...borrowerForm, guarantor_name: e.target.value })}
-                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                       />
                     </div>
                     <div>
@@ -325,7 +325,7 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
                         placeholder="Guarantor Phone"
                         value={borrowerForm.guarantor_phone}
                         onChange={(e) => setBorrowerForm({ ...borrowerForm, guarantor_phone: e.target.value })}
-                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                       />
                     </div>
                     <div>
@@ -334,7 +334,7 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
                         placeholder="Relationship (Friend, Brother, etc.)"
                         value={borrowerForm.guarantor_relation}
                         onChange={(e) => setBorrowerForm({ ...borrowerForm, guarantor_relation: e.target.value })}
-                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                       />
                     </div>
                   </div>
@@ -345,16 +345,16 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
 
           {/* Section 2: Loan Financial Terms */}
           <div className="space-y-4">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-              <IndianRupee className="w-4 h-4 text-emerald-400" />
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+              <IndianRupee className="w-4 h-4 text-emerald-600" />
               2. Loan & Interest Terms
             </span>
 
-            <div className="p-5 bg-slate-800/40 rounded-2xl border border-slate-800 space-y-4">
+            <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {/* Principal Amount */}
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1 font-medium">Principal Amount (₹) *</label>
+                  <label className="block text-xs text-slate-600 mb-1 font-medium">Principal Amount (₹) *</label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₹</span>
                     <input
@@ -362,14 +362,14 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
                       required
                       value={loanForm.principal_amount}
                       onChange={(e) => setLoanForm({ ...loanForm, principal_amount: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 pl-7 pr-3 text-white font-bold text-sm focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl py-2 pl-7 pr-3 text-slate-900 font-bold text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                     />
                   </div>
                 </div>
 
                 {/* Interest Rate */}
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1 font-medium">Interest Rate *</label>
+                  <label className="block text-xs text-slate-600 mb-1 font-medium">Interest Rate *</label>
                   <div className="relative">
                     <input
                       type="number"
@@ -377,18 +377,18 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
                       required
                       value={loanForm.interest_rate}
                       onChange={(e) => setLoanForm({ ...loanForm, interest_rate: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-white font-bold text-sm focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl py-2 px-3 text-slate-900 font-bold text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                     />
                   </div>
                 </div>
 
                 {/* Rate Type */}
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1 font-medium">Rate Type</label>
+                  <label className="block text-xs text-slate-600 mb-1 font-medium">Rate Type</label>
                   <select
                     value={loanForm.rate_type}
                     onChange={(e) => setLoanForm({ ...loanForm, rate_type: e.target.value })}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-white text-sm focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-white border border-slate-300 rounded-xl py-2 px-3 text-slate-900 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                   >
                     <option value="monthly_pct">₹ per ₹100/mo (% monthly)</option>
                     <option value="annual_pct">% Per Annum (p.a.)</option>
@@ -399,7 +399,7 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {/* Disbursement Date */}
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1 font-medium">Disbursement Date *</label>
+                  <label className="block text-xs text-slate-600 mb-1 font-medium">Disbursement Date *</label>
                   <input
                     type="date"
                     required
@@ -412,13 +412,13 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
                         due_day: new Date(d).getDate()
                       });
                     }}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-white text-xs focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-white border border-slate-300 rounded-xl py-2 px-3 text-slate-900 text-xs focus:outline-none focus:border-emerald-600"
                   />
                 </div>
 
                 {/* Due Day of Month */}
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1 font-medium">Monthly Due Day (1..31)</label>
+                  <label className="block text-xs text-slate-600 mb-1 font-medium">Monthly Due Day (1..31)</label>
                   <input
                     type="number"
                     min="1"
@@ -426,18 +426,18 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
                     required
                     value={loanForm.due_day}
                     onChange={(e) => setLoanForm({ ...loanForm, due_day: e.target.value })}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-white text-sm focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-white border border-slate-300 rounded-xl py-2 px-3 text-slate-900 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                   />
                 </div>
 
                 {/* Upfront Interest Toggle */}
                 <div className="flex items-center pt-5">
-                  <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
+                  <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-700">
                     <input
                       type="checkbox"
                       checked={loanForm.upfront_interest_deducted}
                       onChange={(e) => setLoanForm({ ...loanForm, upfront_interest_deducted: e.target.checked })}
-                      className="rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-emerald-500 w-4 h-4 cursor-pointer"
+                      className="rounded bg-white border-slate-300 text-emerald-600 focus:ring-emerald-500 w-4 h-4 cursor-pointer"
                     />
                     <span>Deduct 1st month interest upfront</span>
                   </label>
@@ -448,19 +448,19 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
 
           {/* Section 3: Collateral & Security Details */}
           <div className="space-y-4">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
               3. Security & Collateral Documents
             </span>
 
-            <div className="p-5 bg-slate-800/40 rounded-2xl border border-slate-800 space-y-3">
+            <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">Security Type Taken</label>
+                  <label className="block text-xs text-slate-600 mb-1">Security Type Taken</label>
                   <select
                     value={loanForm.security_type}
                     onChange={(e) => setLoanForm({ ...loanForm, security_type: e.target.value })}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                   >
                     <option value="Promissory Note">Promissory Note (Signed)</option>
                     <option value="Blank Cheque">Signed Blank Cheque</option>
@@ -473,56 +473,56 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
                 </div>
 
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">Cheque / Document Details</label>
+                  <label className="block text-xs text-slate-600 mb-1">Cheque / Document Details</label>
                   <input
                     type="text"
                     placeholder="e.g. HDFC Bank Cheque #452109"
                     value={loanForm.cheque_details}
                     onChange={(e) => setLoanForm({ ...loanForm, cheque_details: e.target.value })}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs text-slate-400 mb-1">Loan Remarks / Purpose</label>
+                <label className="block text-xs text-slate-600 mb-1">Loan Remarks / Purpose</label>
                 <input
                   type="text"
                   placeholder="e.g. Shop renovation, emergency medical, given in cash"
                   value={loanForm.notes}
                   onChange={(e) => setLoanForm({ ...loanForm, notes: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                 />
               </div>
             </div>
           </div>
 
           {/* Live Loan Summary Box */}
-          <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+          <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
             <div>
-              <div className="text-[11px] uppercase tracking-wider text-slate-400">Monthly Interest</div>
-              <div className="text-lg font-black text-emerald-400">{formatCurrency(monthlyInterest)}</div>
+              <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Monthly Interest</div>
+              <div className="text-lg font-black text-emerald-700">{formatCurrency(monthlyInterest)}</div>
             </div>
             <div>
-              <div className="text-[11px] uppercase tracking-wider text-slate-400">Daily Accrual</div>
-              <div className="text-lg font-black text-teal-400">{formatCurrency(dailyInterest)}</div>
+              <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Daily Accrual</div>
+              <div className="text-lg font-black text-teal-700">{formatCurrency(dailyInterest)}</div>
             </div>
             <div>
-              <div className="text-[11px] uppercase tracking-wider text-slate-400">Upfront Deducted</div>
-              <div className="text-lg font-black text-amber-400">{formatCurrency(upfrontAmount)}</div>
+              <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Upfront Deducted</div>
+              <div className="text-lg font-black text-amber-700">{formatCurrency(upfrontAmount)}</div>
             </div>
             <div>
-              <div className="text-[11px] uppercase tracking-wider text-slate-400">Net Cash Handover</div>
-              <div className="text-lg font-black text-white">{formatCurrency(netDisbursed)}</div>
+              <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Net Cash Handover</div>
+              <div className="text-lg font-black text-slate-900">{formatCurrency(netDisbursed)}</div>
             </div>
           </div>
 
           {/* Modal Footer Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 text-sm font-semibold transition-colors cursor-pointer"
+              className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors cursor-pointer border border-slate-200"
             >
               Cancel
             </button>
@@ -530,7 +530,7 @@ export default function NewLoanModal({ isOpen, onClose, onSuccess, existingBorro
             <button
               type="submit"
               disabled={submitting}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all cursor-pointer"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-sm shadow-xs transition-all cursor-pointer"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>{submitting ? 'Disbursing...' : 'Disburse Loan'}</span>

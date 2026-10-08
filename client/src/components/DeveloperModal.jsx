@@ -203,22 +203,22 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6">
-      <div className="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6">
+      <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/95">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-white">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+            <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
               <KeyRound className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">Developer Master Access & License Portal</h3>
-              <p className="text-xs text-slate-400">Control client subscription, validity, and lock/unlock triggers.</p>
+              <h3 className="text-base font-bold text-slate-900">Developer Master Access & License Portal</h3>
+              <p className="text-xs text-slate-500">Control client subscription, validity, and lock/unlock triggers.</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -227,12 +227,12 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {error && (
-            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold">
+            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
               {error}
             </div>
           )}
           {msg && (
-            <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
+            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold">
               {msg}
             </div>
           )}
@@ -240,13 +240,13 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
           {!isAuthenticated ? (
             /* Master PIN Login Form */
             <form onSubmit={handleLogin} className="max-w-sm mx-auto py-8 space-y-4 text-center">
-              <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-amber-400 mx-auto">
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 mx-auto shadow-xs">
                 <Lock className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="font-bold text-white text-base">Enter Developer Master PIN</h4>
-                <p className="text-xs text-slate-400 mt-1">
-                  Default PIN is <code className="text-amber-400 bg-slate-800 px-1.5 py-0.5 rounded">dev@1234</code>
+                <h4 className="font-bold text-slate-900 text-base">Enter Developer Master PIN</h4>
+                <p className="text-xs text-slate-500 mt-1">
+                  Default PIN is <code className="text-amber-800 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded font-mono font-bold">dev@1234</code>
                 </p>
               </div>
 
@@ -257,14 +257,14 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
                   placeholder="Master PIN"
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-center text-white text-base tracking-widest font-mono focus:outline-none focus:border-amber-500"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-center text-slate-900 text-base tracking-widest font-mono focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-md shadow-amber-500/20 transition-all cursor-pointer disabled:opacity-50"
+                className="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm shadow-xs transition-all cursor-pointer disabled:opacity-50"
               >
                 {loading ? 'Verifying...' : 'Unlock Developer Portal'}
               </button>
@@ -274,18 +274,18 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
             <div className="space-y-6">
               {/* Subscription Status Card */}
               {licenseData && (
-                <div className="p-5 bg-slate-800/40 rounded-2xl border border-slate-800 space-y-3">
+                <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Client Name</div>
-                      <div className="text-base font-bold text-white">{licenseData.clientName}</div>
+                      <div className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Client Name</div>
+                      <div className="text-base font-bold text-slate-900">{licenseData.clientName}</div>
                     </div>
 
                     <span className={`px-3 py-1 rounded-full font-bold text-xs ${
-                      licenseData.isSuspended ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30' :
-                      licenseData.isExpired ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30' :
-                      licenseData.isGracePeriod ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30' :
-                      'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                      licenseData.isSuspended ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                      licenseData.isExpired ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                      licenseData.isGracePeriod ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                      'bg-emerald-50 text-emerald-700 border border-emerald-200'
                     }`}>
                       {licenseData.isSuspended ? 'SUSPENDED' :
                        licenseData.isExpired ? 'EXPIRED (LOCKED)' :
@@ -296,25 +296,25 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-xs">
                     <div>
-                      <span className="text-slate-400">Valid Until:</span>
-                      <div className="text-white font-bold">{formatDate(licenseData.validUntil)}</div>
+                      <span className="text-slate-500">Valid Until:</span>
+                      <div className="text-slate-900 font-bold">{formatDate(licenseData.validUntil)}</div>
                     </div>
                     <div>
-                      <span className="text-slate-400">Subscription Plan:</span>
-                      <div className="text-amber-400 font-bold">{licenseData.planType}</div>
+                      <span className="text-slate-500">Subscription Plan:</span>
+                      <div className="text-amber-700 font-bold">{licenseData.planType}</div>
                     </div>
                     <div>
-                      <span className="text-slate-400">Grace Period:</span>
-                      <div className="text-slate-200 font-bold">{licenseData.gracePeriodDays} Days</div>
+                      <span className="text-slate-500">Grace Period:</span>
+                      <div className="text-slate-800 font-bold">{licenseData.gracePeriodDays} Days</div>
                     </div>
                   </div>
                 </div>
               )}
 
               {/* 1-Click Subscription Renewal Actions */}
-              <div className="p-5 bg-slate-800/40 rounded-2xl border border-slate-800 space-y-3">
-                <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-emerald-400" />
+              <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-emerald-600" />
                   Quick License Renewal & Access Controls
                 </h4>
 
@@ -322,7 +322,7 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
                   <button
                     onClick={() => handleRenew(30, 'MONTHLY')}
                     disabled={actionLoading}
-                    className="py-2.5 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-bold text-xs border border-emerald-500/30 transition-all cursor-pointer text-center"
+                    className="py-2.5 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs border border-emerald-200 transition-all cursor-pointer text-center"
                   >
                     + 30 Days (Monthly)
                   </button>
@@ -330,7 +330,7 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
                   <button
                     onClick={() => handleRenew(90, 'QUARTERLY')}
                     disabled={actionLoading}
-                    className="py-2.5 px-3 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 font-bold text-xs border border-teal-500/30 transition-all cursor-pointer text-center"
+                    className="py-2.5 px-3 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-700 font-bold text-xs border border-teal-200 transition-all cursor-pointer text-center"
                   >
                     + 90 Days (3 Months)
                   </button>
@@ -338,19 +338,19 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
                   <button
                     onClick={() => handleRenew(365, 'YEARLY')}
                     disabled={actionLoading}
-                    className="py-2.5 px-3 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 font-bold text-xs border border-indigo-500/30 transition-all cursor-pointer text-center"
+                    className="py-2.5 px-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs border border-indigo-200 transition-all cursor-pointer text-center"
                   >
                     + 365 Days (1 Year)
                   </button>
                 </div>
 
                 {/* Suspend or Reactivate */}
-                <div className="flex items-center gap-2 pt-2 border-t border-slate-700/60">
+                <div className="flex items-center gap-2 pt-2 border-t border-slate-200">
                   {licenseData?.isSuspended ? (
                     <button
                       onClick={handleReactivate}
                       disabled={actionLoading}
-                      className="flex-1 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-colors cursor-pointer"
+                      className="flex-1 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-colors cursor-pointer shadow-xs"
                     >
                       Reactivate Access
                     </button>
@@ -358,7 +358,7 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
                     <button
                       onClick={handleSuspend}
                       disabled={actionLoading}
-                      className="flex-1 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 font-bold text-xs border border-rose-500/30 transition-colors cursor-pointer"
+                      className="flex-1 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs border border-rose-200 transition-colors cursor-pointer"
                     >
                       Emergency Lock / Suspend Client Now
                     </button>
@@ -367,29 +367,29 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
               </div>
 
               {/* Developer Info & Client Configuration Form */}
-              <form onSubmit={handleSaveConfig} className="p-5 bg-slate-800/40 rounded-2xl border border-slate-800 space-y-4">
-                <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <UserCheck className="w-4 h-4 text-amber-400" />
+              <form onSubmit={handleSaveConfig} className="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-4">
+                <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <UserCheck className="w-4 h-4 text-amber-600" />
                   Client & Developer Payment Profile
                 </h4>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   <div>
-                    <label className="block text-slate-400 mb-1">Client Business Name</label>
+                    <label className="block text-slate-600 mb-1">Client Business Name</label>
                     <input
                       type="text"
                       value={configForm.clientName}
                       onChange={(e) => setConfigForm({ ...configForm, clientName: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-slate-400 mb-1">Subscription Plan</label>
+                    <label className="block text-slate-600 mb-1">Subscription Plan</label>
                     <select
                       value={configForm.planType}
                       onChange={(e) => setConfigForm({ ...configForm, planType: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
                     >
                       <option value="MONTHLY">Monthly Subscription</option>
                       <option value="YEARLY">Yearly Subscription</option>
@@ -398,44 +398,44 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
                   </div>
 
                   <div>
-                    <label className="block text-slate-400 mb-1">Developer Contact Name</label>
+                    <label className="block text-slate-600 mb-1">Developer Contact Name</label>
                     <input
                       type="text"
                       value={configForm.developerName}
                       onChange={(e) => setConfigForm({ ...configForm, developerName: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-slate-400 mb-1">Developer Phone (For Renewal Calls/WhatsApp)</label>
+                    <label className="block text-slate-600 mb-1">Developer Phone (For Renewal Calls/WhatsApp)</label>
                     <input
                       type="tel"
                       value={configForm.developerPhone}
                       onChange={(e) => setConfigForm({ ...configForm, developerPhone: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-slate-400 mb-1">Developer Renewal UPI ID</label>
+                    <label className="block text-slate-600 mb-1">Developer Renewal UPI ID</label>
                     <input
                       type="text"
                       placeholder="e.g. developer@upi"
                       value={configForm.developerUpi}
                       onChange={(e) => setConfigForm({ ...configForm, developerUpi: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-slate-400 mb-1">Change Developer Master PIN</label>
+                    <label className="block text-slate-600 mb-1">Change Developer Master PIN</label>
                     <input
                       type="password"
                       placeholder="Leave blank to keep current"
                       value={configForm.newPin}
                       onChange={(e) => setConfigForm({ ...configForm, newPin: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
                     />
                   </div>
                 </div>
@@ -444,7 +444,7 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
                   <button
                     type="submit"
                     disabled={actionLoading}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 transition-all cursor-pointer"
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-xs transition-all cursor-pointer"
                   >
                     <Save className="w-3.5 h-3.5" />
                     <span>Save Configuration</span>

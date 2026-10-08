@@ -91,19 +91,19 @@ export default function PaymentModal({ isOpen, onClose, loan, onSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden">
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/90">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-white">
           <div>
-            <h3 className="text-base font-bold text-white">Record Loan Payment</h3>
-            <p className="text-xs text-slate-400">
-              Borrower: <span className="text-emerald-400 font-semibold">{loan.borrower_name}</span> (Loan #{loan.id})
+            <h3 className="text-base font-bold text-slate-900">Record Loan Payment</h3>
+            <p className="text-xs text-slate-500">
+              Borrower: <span className="text-emerald-700 font-semibold">{loan.borrower_name}</span> (Loan #{loan.id})
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -112,14 +112,14 @@ export default function PaymentModal({ isOpen, onClose, loan, onSuccess }) {
         {/* Modal Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {error && (
-            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs">
+            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
               {error}
             </div>
           )}
 
           {/* Payment Type Selector */}
           <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
               Payment Category
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -128,8 +128,8 @@ export default function PaymentModal({ isOpen, onClose, loan, onSuccess }) {
                 onClick={() => handleTypeChange('INTEREST')}
                 className={`py-2 px-2.5 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center ${
                   paymentType === 'INTEREST'
-                    ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500 shadow-sm'
-                    : 'bg-slate-800/60 text-slate-400 border-slate-700 hover:border-slate-600'
+                    ? 'bg-indigo-50 text-indigo-700 border-indigo-300 shadow-xs'
+                    : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
                 }`}
               >
                 Monthly Interest
@@ -139,8 +139,8 @@ export default function PaymentModal({ isOpen, onClose, loan, onSuccess }) {
                 onClick={() => handleTypeChange('PRINCIPAL')}
                 className={`py-2 px-2.5 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center ${
                   paymentType === 'PRINCIPAL'
-                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500 shadow-sm'
-                    : 'bg-slate-800/60 text-slate-400 border-slate-700 hover:border-slate-600'
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-300 shadow-xs'
+                    : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
                 }`}
               >
                 Principal Part-Pay
@@ -150,8 +150,8 @@ export default function PaymentModal({ isOpen, onClose, loan, onSuccess }) {
                 onClick={() => handleTypeChange('SETTLEMENT')}
                 className={`py-2 px-2.5 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center ${
                   paymentType === 'SETTLEMENT'
-                    ? 'bg-amber-500/20 text-amber-300 border-amber-500 shadow-sm'
-                    : 'bg-slate-800/60 text-slate-400 border-slate-700 hover:border-slate-600'
+                    ? 'bg-amber-50 text-amber-700 border-amber-300 shadow-xs'
+                    : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
                 }`}
               >
                 Full Settlement
@@ -161,10 +161,10 @@ export default function PaymentModal({ isOpen, onClose, loan, onSuccess }) {
 
           {/* Amount Received */}
           <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1 flex justify-between">
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1 flex justify-between">
               <span>Amount Received (₹) *</span>
               {paymentType === 'INTEREST' && (
-                <span className="text-indigo-400 font-semibold">Monthly Due: {formatCurrency(monthlyInterest)}</span>
+                <span className="text-indigo-700 font-semibold">Monthly Due: {formatCurrency(monthlyInterest)}</span>
               )}
             </label>
             <div className="relative">
@@ -175,7 +175,7 @@ export default function PaymentModal({ isOpen, onClose, loan, onSuccess }) {
                 required
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl py-2.5 pl-8 pr-4 text-white text-lg font-black focus:outline-none"
+                className="w-full bg-white border border-slate-300 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 rounded-xl py-2.5 pl-8 pr-4 text-slate-900 text-lg font-black focus:outline-none"
               />
             </div>
           </div>
@@ -183,11 +183,11 @@ export default function PaymentModal({ isOpen, onClose, loan, onSuccess }) {
           {/* Payment Mode & Date */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Payment Mode</label>
+              <label className="block text-xs text-slate-600 mb-1">Payment Mode</label>
               <select
                 value={paymentMode}
                 onChange={(e) => setPaymentMode(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
+                className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
               >
                 <option value="UPI">UPI (GPay / PhonePe)</option>
                 <option value="CASH">Cash in Hand</option>
@@ -197,13 +197,13 @@ export default function PaymentModal({ isOpen, onClose, loan, onSuccess }) {
             </div>
 
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Payment Date</label>
+              <label className="block text-xs text-slate-600 mb-1">Payment Date</label>
               <input
                 type="date"
                 required
                 value={paymentDate}
                 onChange={(e) => setPaymentDate(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
+                className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
               />
             </div>
           </div>
@@ -211,39 +211,39 @@ export default function PaymentModal({ isOpen, onClose, loan, onSuccess }) {
           {/* Transaction Ref / Note */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-slate-400 mb-1">UPI / Cheque Ref</label>
+              <label className="block text-xs text-slate-600 mb-1">UPI / Cheque Ref</label>
               <input
                 type="text"
                 placeholder="e.g. UPI Ref #492819"
                 value={transactionRef}
                 onChange={(e) => setTransactionRef(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
+                className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
               />
             </div>
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Notes</label>
+              <label className="block text-xs text-slate-600 mb-1">Notes</label>
               <input
                 type="text"
                 placeholder="e.g. Paid in person"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
+                className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-900 text-xs focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
               />
             </div>
           </div>
 
           {/* Impact preview */}
           {paymentType === 'PRINCIPAL' && (
-            <div className="p-3 bg-emerald-950/20 border border-emerald-500/30 rounded-xl text-xs space-y-1">
-              <div className="flex items-center justify-between text-slate-300">
+            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs space-y-1">
+              <div className="flex items-center justify-between text-slate-600">
                 <span>Current Principal:</span>
-                <span className="font-semibold text-white">{formatCurrency(currentPrincipal)}</span>
+                <span className="font-semibold text-slate-900">{formatCurrency(currentPrincipal)}</span>
               </div>
-              <div className="flex items-center justify-between text-slate-300">
+              <div className="flex items-center justify-between text-slate-600">
                 <span>New Reduced Principal:</span>
-                <span className="font-bold text-emerald-400">{formatCurrency(newPrincipalAfterPay)}</span>
+                <span className="font-bold text-emerald-700">{formatCurrency(newPrincipalAfterPay)}</span>
               </div>
-              <p className="text-[11px] text-slate-400 pt-1">
+              <p className="text-[11px] text-slate-500 pt-1">
                 Future monthly interest will automatically reduce to match the new principal.
               </p>
             </div>
@@ -254,14 +254,14 @@ export default function PaymentModal({ isOpen, onClose, loan, onSuccess }) {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl border border-slate-200 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-md shadow-emerald-500/20 transition-all cursor-pointer"
+              className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-xs transition-all cursor-pointer"
             >
               {submitting ? 'Recording...' : 'Confirm Payment'}
             </button>
