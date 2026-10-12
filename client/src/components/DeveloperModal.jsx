@@ -39,11 +39,12 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
     if (isOpen) {
       setError('');
       setMsg('');
+      setPin('');
       if (isAuthenticated) {
         fetchStatus();
       }
     } else {
-      // Don't reset authentication immediately on brief close unless desired
+      setPin('');
     }
   }, [isOpen]);
 
@@ -244,9 +245,9 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
                 <Lock className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="font-bold text-slate-900 text-base">Enter Developer Master PIN</h4>
+                <h4 className="font-bold text-slate-900 text-base">Developer Master Access</h4>
                 <p className="text-xs text-slate-500 mt-1">
-                  Default PIN is <code className="text-amber-800 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded font-mono font-bold">dev@1234</code>
+                  Restricted to platform administrators and authorized support staff only.
                 </p>
               </div>
 
@@ -254,7 +255,8 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
                 <input
                   type="password"
                   required
-                  placeholder="Master PIN"
+                  placeholder="Enter Master PIN"
+                  autoComplete="new-password"
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
                   className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-center text-slate-900 text-base tracking-widest font-mono focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
