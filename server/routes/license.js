@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const { getSuperAdmin, getClientLicenseStatus } = require('../middleware/auth');
-const { verifyPassword, hashPassword } = require('../utils/security');
+const { verifyPassword, hashPassword, verifyToken } = require('../utils/security');
 
 // Helper to get client ID from request
 function getTargetClientId(req) {
@@ -39,6 +39,18 @@ router.post('/verify-pin', (req, res) => {
 
 // Auth middleware for license actions
 function requireMasterPin(req, res, next) {
+  // 1. Check JWT Bearer token
+  const authHeader = req.headers['authorization'];
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.split(' ')[1];
+    const decoded = verifyToken(token);
+    if (decoded && decoded.role === 'SUPER_ADMIN') {
+      req.user = decoded;
+      return next();
+    }
+  }
+
+  // 2. Fallback check for x-master-pin header or body.pin
   const pin = req.headers['x-developer-pin'] || req.headers['x-master-pin'] || req.body?.pin;
   const admin = getSuperAdmin();
   if (!pin || !verifyPassword(pin.trim(), admin?.master_pin)) {

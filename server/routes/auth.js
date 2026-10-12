@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../db');
 const { getSuperAdmin, getClientLicenseStatus } = require('../middleware/auth');
 const { hashPassword, verifyPassword, isBcryptHash, generateToken, verifyToken } = require('../utils/security');
+const { sendDeveloperOtp, cleanPhone } = require('../services/smsService');
 
 // Universal Login
 router.post('/login', (req, res) => {
@@ -175,6 +176,147 @@ router.post('/change-password', (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// In-memory OTP Store for Developer Login: phone10 -> { otp, expiresAt, attempts, requestedAt }
+const developerOtpStore = new Map();
+
+function maskPhone(phone) {
+  const cleaned = cleanPhone(phone);
+  if (cleaned.length < 4) return phone;
+  const last4 = cleaned.slice(-4);
+  return `+91 ******${last4}`;
+}
+
+// 1. Send OTP to Developer Registered Mobile
+router.post('/developer/send-otp', async (req, res) => {
+  try {
+    const { phone } = req.body;
+    if (!phone) {
+      return res.status(400).json({ success: false, message: 'Developer mobile number is required' });
+    }
+
+    const admin = getSuperAdmin();
+    if (!admin || !admin.developer_phone) {
+      return res.status(400).json({ success: false, message: 'Developer profile is not configured with a mobile number' });
+    }
+
+    const inputPhone = cleanPhone(phone).slice(-10);
+    const registeredPhone = cleanPhone(admin.developer_phone).slice(-10);
+
+    if (inputPhone !== registeredPhone) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Entered mobile number does not match registered developer phone.' 
+      });
+    }
+
+    // Cooldown check (30 seconds)
+    const existing = developerOtpStore.get(inputPhone);
+    if (existing && Date.now() - existing.requestedAt < 30000) {
+      const waitSeconds = Math.ceil((30000 - (Date.now() - existing.requestedAt)) / 1000);
+      return res.status(429).json({ 
+        success: false, 
+        message: `Please wait ${waitSeconds} seconds before requesting a new OTP.` 
+      });
+    }
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes validity
+
+    developerOtpStore.set(inputPhone, {
+      otp,
+      expiresAt,
+      attempts: 0,
+      requestedAt: Date.now()
+    });
+
+    const { sentRealSms } = await sendDeveloperOtp(inputPhone, otp);
+    const masked = maskPhone(inputPhone);
+
+    res.json({
+      success: true,
+      message: `OTP sent successfully to registered developer mobile (${masked}).`,
+      phone: masked,
+      isSimulated: !sentRealSms,
+      devOtp: !sentRealSms ? otp : undefined
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// 2. Verify Developer OTP and Login
+router.post('/developer/verify-otp', (req, res) => {
+  try {
+    const { phone, otp } = req.body;
+    if (!phone || !otp) {
+      return res.status(400).json({ success: false, message: 'Mobile number and OTP are required' });
+    }
+
+    const admin = getSuperAdmin();
+    const inputPhone = cleanPhone(phone).slice(-10);
+    const registeredPhone = cleanPhone(admin?.developer_phone || '').slice(-10);
+
+    if (inputPhone !== registeredPhone) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid developer credentials.' 
+      });
+    }
+
+    const record = developerOtpStore.get(inputPhone);
+    if (!record || Date.now() > record.expiresAt) {
+      developerOtpStore.delete(inputPhone);
+      return res.status(400).json({ 
+        success: false, 
+        message: 'OTP has expired or was not requested. Please request a new OTP.' 
+      });
+    }
+
+    if (record.attempts >= 5) {
+      developerOtpStore.delete(inputPhone);
+      return res.status(429).json({ 
+        success: false, 
+        message: 'Too many incorrect attempts. Please request a fresh OTP.' 
+      });
+    }
+
+    const enteredOtp = String(otp).trim();
+    if (record.otp !== enteredOtp) {
+      record.attempts += 1;
+      const remaining = 5 - record.attempts;
+      return res.status(400).json({ 
+        success: false, 
+        message: `Incorrect OTP. ${remaining} attempt(s) remaining.` 
+      });
+    }
+
+    // OTP Verified! Consume the OTP
+    developerOtpStore.delete(inputPhone);
+
+    // Issue JWT Token
+    const token = generateToken({
+      role: 'SUPER_ADMIN',
+      adminId: admin.id || 1,
+      name: admin.developer_name || 'Software Developer'
+    });
+
+    return res.json({
+      success: true,
+      role: 'SUPER_ADMIN',
+      user: {
+        name: admin.developer_name || 'Software Developer',
+        phone: admin.developer_phone || '',
+        upi: admin.developer_upi || ''
+      },
+      masterPin: admin.master_pin,
+      token
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 

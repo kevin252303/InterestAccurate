@@ -139,8 +139,55 @@ function generateWhatsAppUrl(phone, messageText) {
   return `https://wa.me/${cleaned}?text=${encodeURIComponent(messageText)}`;
 }
 
+/**
+ * Send an OTP to the developer mobile number via Fast2SMS or console simulator
+ */
+async function sendDeveloperOtp(phone, otp) {
+  const cleanedPhone = cleanPhone(phone);
+  const messageText = `Your InterestAccurate Developer Verification Code is: ${otp}. Valid for 5 minutes. Do not share this code.`;
+  
+  // Check Fast2SMS API key in env or lender_settings
+  const settings = db.prepare('SELECT * FROM lender_settings WHERE client_id = 1').get() || {};
+  const fast2smsKey = process.env.FAST2SMS_API_KEY || settings.fast2sms_api_key;
+  
+  let sentRealSms = false;
+  let error = '';
+
+  if (fast2smsKey) {
+    try {
+      const res = await axios.post('https://www.fast2sms.com/dev/bulkV2', {
+        route: 'otp',
+        variables_values: otp,
+        numbers: cleanedPhone
+      }, {
+        headers: {
+          'authorization': fast2smsKey,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (res.data?.return === true) {
+        sentRealSms = true;
+      } else {
+        error = res.data?.message || 'Fast2SMS returned error';
+      }
+    } catch (err) {
+      error = err.response?.data?.message || err.message;
+    }
+  }
+
+  console.log(`\n================== [DEVELOPER OTP] ==================`);
+  console.log(`📱 To: Developer Mobile (+91 ${cleanedPhone})`);
+  console.log(`🔑 Verification Code: ${otp}`);
+  console.log(`📡 Gateway: ${sentRealSms ? 'DELIVERED VIA FAST2SMS' : 'CONSOLE SIMULATOR'}`);
+  if (error) console.log(`⚠️ SMS Gateway Notice: ${error}`);
+  console.log(`====================================================\n`);
+
+  return { sentRealSms, error };
+}
+
 module.exports = {
   sendSms,
+  sendDeveloperOtp,
   formatMessage,
   generateWhatsAppUrl,
   cleanPhone

@@ -11,12 +11,23 @@ import {
   Unlock, 
   Sparkles, 
   Save, 
-  UserCheck
+  UserCheck,
+  Phone,
+  ShieldCheck,
+  RefreshCw
 } from 'lucide-react';
 import { formatDate } from '../utils/formatters';
 
 export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
   const [pin, setPin] = useState('');
+  const [token, setToken] = useState('');
+  const [authMethod, setAuthMethod] = useState('otp'); // 'otp' or 'pin'
+  const [devPhone, setDevPhone] = useState('6353520761');
+  const [devOtp, setDevOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [maskedPhone, setMaskedPhone] = useState('');
+  const [otpTimer, setOtpTimer] = useState(0);
+  const [simulatedOtp, setSimulatedOtp] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [licenseData, setLicenseData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -36,15 +47,24 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
   });
 
   useEffect(() => {
+    let interval = null;
+    if (otpTimer > 0) {
+      interval = setInterval(() => {
+        setOtpTimer((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [otpTimer]);
+
+  useEffect(() => {
     if (isOpen) {
       setError('');
       setMsg('');
       setPin('');
+      setDevOtp('');
       if (isAuthenticated) {
         fetchStatus();
       }
-    } else {
-      setPin('');
     }
   }, [isOpen]);
 
@@ -64,6 +84,60 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
           developerUpi: data.data.developerUpi || '',
           newPin: ''
         });
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendOtp = async (e) => {
+    e?.preventDefault();
+    setError('');
+    setMsg('');
+    setLoading(true);
+    try {
+      const res = await fetch('/api/auth/developer/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: devPhone })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOtpSent(true);
+        setMaskedPhone(data.phone || devPhone);
+        setSimulatedOtp(data.devOtp || '');
+        if (data.devOtp) setDevOtp(data.devOtp);
+        setOtpTimer(30);
+      } else {
+        setError(data.message || 'Failed to send OTP');
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e?.preventDefault();
+    setError('');
+    setLoading(true);
+    try {
+      const res = await fetch('/api/auth/developer/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: devPhone, otp: devOtp })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setToken(data.token);
+        if (data.masterPin) setPin(data.masterPin);
+        setIsAuthenticated(true);
+        fetchStatus();
+      } else {
+        setError(data.message || 'Incorrect verification code');
       }
     } catch (err) {
       setError(err.message);
@@ -96,6 +170,13 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
     }
   };
 
+  const getAuthHeaders = () => {
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    if (pin) headers['x-master-pin'] = pin;
+    return headers;
+  };
+
   const handleRenew = async (days, plan = null) => {
     setActionLoading(true);
     setError('');
@@ -103,7 +184,7 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
     try {
       const res = await fetch('/api/license/renew', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ pin, extensionDays: days, planType: plan })
       });
       const data = await res.json();
@@ -129,7 +210,7 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
     try {
       const res = await fetch('/api/license/suspend', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ pin })
       });
       const data = await res.json();
@@ -154,7 +235,7 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
     try {
       const res = await fetch('/api/license/reactivate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ pin })
       });
       const data = await res.json();
@@ -180,7 +261,7 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
     try {
       const res = await fetch('/api/license/update-config', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ pin, ...configForm })
       });
       const data = await res.json();
@@ -239,38 +320,164 @@ export default function DeveloperModal({ isOpen, onClose, onLicenseUpdated }) {
           )}
 
           {!isAuthenticated ? (
-            /* Master PIN Login Form */
-            <form onSubmit={handleLogin} className="max-w-sm mx-auto py-8 space-y-4 text-center">
+            <div className="max-w-sm mx-auto py-6 space-y-4">
               <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 mx-auto shadow-xs">
                 <Lock className="w-6 h-6" />
               </div>
-              <div>
+              <div className="text-center">
                 <h4 className="font-bold text-slate-900 text-base">Developer Master Access</h4>
                 <p className="text-xs text-slate-500 mt-1">
                   Restricted to platform administrators and authorized support staff only.
                 </p>
               </div>
 
-              <div>
-                <input
-                  type="password"
-                  required
-                  placeholder="Enter Master PIN"
-                  autoComplete="new-password"
-                  value={pin}
-                  onChange={(e) => setPin(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-center text-slate-900 text-base tracking-widest font-mono focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
-                />
+              {/* Method Switcher */}
+              <div className="grid grid-cols-2 p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-bold">
+                <button
+                  type="button"
+                  onClick={() => { setAuthMethod('otp'); setError(''); }}
+                  className={`py-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                    authMethod === 'otp' ? 'bg-white text-amber-700 shadow-xs' : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>Mobile OTP</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setAuthMethod('pin'); setError(''); }}
+                  className={`py-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                    authMethod === 'pin' ? 'bg-white text-amber-700 shadow-xs' : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  <KeyRound className="w-3.5 h-3.5" />
+                  <span>Master PIN</span>
+                </button>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm shadow-xs transition-all cursor-pointer disabled:opacity-50"
-              >
-                {loading ? 'Verifying...' : 'Unlock Developer Portal'}
-              </button>
-            </form>
+              {authMethod === 'otp' ? (
+                !otpSent ? (
+                  <form onSubmit={handleSendOtp} className="space-y-4">
+                    <div>
+                      <label className="block text-xs text-slate-600 uppercase tracking-wider font-semibold mb-1 text-left">
+                        Registered Developer Mobile
+                      </label>
+                      <div className="relative">
+                        <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="tel"
+                          required
+                          placeholder="e.g. 6353520761"
+                          value={devPhone}
+                          onChange={(e) => setDevPhone(e.target.value)}
+                          className="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-slate-900 text-sm font-mono focus:outline-none focus:border-amber-500"
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-sm shadow-xs transition-all cursor-pointer disabled:opacity-50"
+                    >
+                      {loading ? 'Sending OTP...' : 'Send Verification OTP'}
+                    </button>
+                  </form>
+                ) : (
+                  <form onSubmit={handleVerifyOtp} className="space-y-4">
+                    <div className="flex items-center justify-between text-xs px-1 text-slate-600">
+                      <span>Sent to <strong>{maskedPhone || devPhone}</strong></span>
+                      <button
+                        type="button"
+                        onClick={() => { setOtpSent(false); setDevOtp(''); setError(''); }}
+                        className="text-amber-700 hover:underline font-semibold cursor-pointer"
+                      >
+                        Change
+                      </button>
+                    </div>
+
+                    {simulatedOtp && (
+                      <div 
+                        onClick={() => setDevOtp(simulatedOtp)}
+                        className="p-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold flex items-center justify-between cursor-pointer hover:bg-amber-100 transition-colors"
+                        title="Click to auto-fill OTP"
+                      >
+                        <span>✨ Console Demo OTP: <span className="font-mono tracking-widest">{simulatedOtp}</span></span>
+                        <span className="text-[10px] uppercase tracking-wider bg-amber-200/60 px-1.5 py-0.5 rounded">Auto-fill</span>
+                      </div>
+                    )}
+
+                    <div>
+                      <label className="block text-xs text-slate-600 uppercase tracking-wider font-semibold mb-1 text-left">
+                        Enter 6-Digit OTP Code
+                      </label>
+                      <div className="relative">
+                        <ShieldCheck className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="text"
+                          required
+                          maxLength={6}
+                          placeholder="••••••"
+                          value={devOtp}
+                          onChange={(e) => setDevOtp(e.target.value.replace(/\D/g, ''))}
+                          autoFocus
+                          className="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-slate-900 text-base font-mono tracking-widest text-center focus:outline-none focus:border-amber-500"
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-sm shadow-xs transition-all cursor-pointer disabled:opacity-50"
+                    >
+                      {loading ? 'Verifying...' : 'Verify OTP & Unlock Portal'}
+                    </button>
+
+                    <div className="text-center pt-1">
+                      {otpTimer > 0 ? (
+                        <span className="text-xs text-slate-400">
+                          Resend code in <strong className="text-slate-600">{otpTimer}s</strong>
+                        </span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={handleSendOtp}
+                          disabled={loading}
+                          className="text-xs text-amber-700 hover:text-amber-800 font-semibold cursor-pointer inline-flex items-center gap-1"
+                        >
+                          <RefreshCw className="w-3 h-3" />
+                          <span>Resend Code</span>
+                        </button>
+                      )}
+                    </div>
+                  </form>
+                )
+              ) : (
+                /* Master PIN Form */
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div>
+                    <input
+                      type="password"
+                      required
+                      placeholder="Enter Master PIN"
+                      autoComplete="new-password"
+                      value={pin}
+                      onChange={(e) => setPin(e.target.value)}
+                      className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-center text-slate-900 text-base tracking-widest font-mono focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm shadow-xs transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    {loading ? 'Verifying...' : 'Unlock Developer Portal'}
+                  </button>
+                </form>
+              )}
+            </div>
           ) : (
             /* Authenticated Developer Admin Panel */
             <div className="space-y-6">
